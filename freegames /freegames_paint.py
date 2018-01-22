@@ -1,5 +1,6 @@
-from random import *
-from turtle import *
+import random
+from random import choice
+import turtle
 from freegames import vector
 
 def value():
@@ -22,15 +23,15 @@ def draw():
     if y < -200 or y > 200:
         aim.y = -aim.y
 
-    clear()
-    goto(x, y)
-    dot(10)
+    vector.clear()
+    vector.goto(x, y)
+    vector.dot(10)
 
-    ontimer(draw, 50)
+    vector.ontimer(draw, 50)
 
-setup(420, 420, 370, 0)
-hideturtle()
-tracer(False)
-up()
-draw()
-done()
+vector.setup(420, 420, 370, 0)
+turtle.hideturtle()
+vector.tracer(False)
+vector.up()
+vector.draw()
+vector.done()
