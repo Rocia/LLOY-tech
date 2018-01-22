@@ -52,4 +52,10 @@ def ip1():
         
 def ip2(C, F):
     for i in range (0, F-1):
-        
+        string = input("Enter X, Y and P (eg : 3 4 5): ")
+        split = string.split(' ')
+        try:
+            if len(split) == 2 and isinstance(C, int) and isinstance(F, int):
+                return split
+        except:
+            sys.exit("ERROR")
