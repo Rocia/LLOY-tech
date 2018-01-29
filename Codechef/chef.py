@@ -38,24 +38,46 @@ import sys
 
 def take_input():
     line1 = ip1()
-    C, F = line1[0], line1[1]
+    C, F = int(line1[0]), int(line1[1])
+    print(C, F)
     line2 = ip2(C, F)
+    print(line2)
     
 def ip1():
     string = input("Enter C and F: ")
     split = string.split(' ')
     try:
-        if len(split) == 2 and isinstance(C, int) and isinstance(F, int):
+        if len(split) == 2 and isinstance(int(split[0]), int) and isinstance(int(split[1]), int):
             return split
     except:
         sys.exit("ERROR")
         
+def split_res():
+    string = input("Enter X, Y and P (eg : x y z): ")
+    split = string.split(' ')
+    print(split)
+    
 def ip2(C, F):
+    res = []
     for i in range (0, F-1):
-        string = input("Enter X, Y and P (eg : 3 4 5): ")
-        split = string.split(' ')
+
         try:
-            if len(split) == 2 and isinstance(C, int) and isinstance(F, int):
-                return split
+            if len(split) == 3 and isinstance(int(split[0]), int) and isinstance(int(split[1]), int) and isinstance(int(split[2]), int):
+                check = check_validity(split)
+                if check:
+                    res.append(split)
+                else:
+                    
         except:
             sys.exit("ERROR")
+    return res
+
+def check_validity(res):
+    unqs = list(set(result).union(res))
+    for unq in set(unqs):
+        if unqs.count(unq) > 2:
+            return False
+        
+result = []
+if __name__ == "__main__":
+    take_input()
