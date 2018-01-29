@@ -17,7 +17,7 @@ the route.
 Nikhil has information about the cost of each direct flight. He would like to maximize the value of his prize, so he would like to choose a 
 pair of cities on the network for which the cost of the cheapest route is as high as possible.
 
-For instance, suppose the network consists of four cities {1, 2, 3, 4}, connected as shown on the right.
+For instance, suppose the network consists of four cities {1, 2, 3, 4}.
 
 In this case, Nikhil should choose to travel between 1 and 4, where the cheapest route has cost 19. You can check that for all other pairs of 
 cities, the cheapest route has a smaller cost. For instance, notice that though the direct flight from 1 to 3 costs 24, there is a cheaper 
@@ -33,13 +33,14 @@ input format
     Lines 2 to F + 1 : Each line describes one direct flight between a pair of cities and consists of three integers, x, y and p, 
     where x and y are the two cities connected by this flight and p is the price of this
 """
+
 import sys
 
 
 def take_input():
     line1 = ip1()
     C, F = int(line1[0]), int(line1[1])
-    print(C, F)
+    make_pairs(C, F)
     line2 = ip2(C, F)
     print(line2)
     
@@ -52,32 +53,26 @@ def ip1():
     except:
         sys.exit("ERROR")
         
-def split_res():
-    string = input("Enter X, Y and P (eg : x y z): ")
-    split = string.split(' ')
-    print(split)
-    
 def ip2(C, F):
-    res = []
-    for i in range (0, F-1):
-
+    res = {}
+    for i in range (0, F):
+        string = input("Enter X, Y and P (eg : 3 4 5): ")
+        split = string.split(' ')
+        print(split)
         try:
             if len(split) == 3 and isinstance(int(split[0]), int) and isinstance(int(split[1]), int) and isinstance(int(split[2]), int):
-                check = check_validity(split)
-                if check:
-                    res.append(split)
-                else:
-                    
+                res[[split[0], split[1]]]= split[2]
         except:
             sys.exit("ERROR")
     return res
 
-def check_validity(res):
-    unqs = list(set(result).union(res))
-    for unq in set(unqs):
-        if unqs.count(unq) > 2:
-            return False
-        
-result = []
+def make_pairs(C,F):
+    psbl = []
+    for i in range(1,C+1):
+        for j in range(1,C+1):
+            if i != j:
+                psbl.append((i,j))
+    sys.exit(1)
+    
 if __name__ == "__main__":
     take_input()
