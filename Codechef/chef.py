@@ -73,6 +73,10 @@ def make_pairs(C,F):
         for j in range(1,C+1):
             if i != j:
                 psbl.append((i,j))
+            for k in range(1,C+1):
+                if i != k and j != k and i != j:
+                    psbl.append((i,j,k))
+            
     return psbl
 
 def process_paths(pathslist, pathdict):
