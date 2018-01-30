@@ -38,10 +38,14 @@ import sys
 
 
 def take_input():
-    line1 = ip1()
+    #line1 = ip1()
+    line1 = [4, 4]
     C, F = line1[0], line1[1]
-    paths = make_pairs(C, F)
-    line2 = ip2(C, F)
+    val = make_pairs(C, F)
+    paths, dests = val[0], val[1]
+    
+    #line2 = ip2(C, F)
+    line2 = {'(1, 2)':3,'(1, 3)':5,'(2, 3)':7,'(3, 4)':9, '(2, 1)':3,'(3, 1)':5,'(3, 2)':7,'(4, 3)':9}
     process_paths(paths, line2)
     
     
@@ -68,27 +72,37 @@ def ip2(C, F):
     return res
 
 def make_pairs(C,F):
-    psbl = []
+    psbl, psbl_dest = [], []
     for i in range(1,C+1):
         for j in range(1,C+1):
-            if i != j:
-                psbl.append((i,j))
+            if i != j and (j, i) not in psbl:
+                psbl.append(((i,j)))
+                psbl_dest.append((i,j))
             for k in range(1,C+1):
-                if i != k and j != k and i != j:
-                    psbl.append((i,j,k))
-            
-    return psbl
+                if i != j and j != k and i != k and (i, j, k) not in psbl:
+                    psbl.append(((i,j),(j,k)))
+                for l in range(1,C+1):
+                    if i != j != k != l and i != k and j != l and i != l and (i, j, k, l) not in psbl:
+                        psbl.append(((i, j),(j, k),(k, l)))
+    return psbl, psbl_dest
 
 def process_paths(pathslist, pathdict):
     #print(pathslist, pathdict)
     cost_per_path = {}
     lst = list(pathdict.keys())
+    #print(lst)
     for path in pathslist:
-        if str(path) in lst:
+        if str(path) in lst and len(path) == 2 and isinstance(path[0], int):
             cost_per_path[str(path)] = pathdict[str(path)]
-        else:
-            print(1)
-    print(cost_per_path)
-        
+        elif str(path[0]) in lst and str(path[1]) in lst and len(path) == 2:
+            cost_per_path[str((path[0][0], path[0][1], path[1][1]))] = int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])
+        elif str(path[0]) in lst and str(path[1]) in lst and str(path[2]) in lst  and len(path) == 3:
+            cost_per_path[str((path[0][0], path[0][1], path[2][0], path[2][1]))] = int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])+  int(pathdict[str(path[2])])
+
+    check_cost(cost_per_path)
+    
+def check_cost(pathcost):
+    print(1) 
+       
 if __name__ == "__main__":
     take_input()
