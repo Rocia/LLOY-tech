@@ -39,17 +39,18 @@ import sys
 
 def take_input():
     line1 = ip1()
-    C, F = int(line1[0]), int(line1[1])
-    make_pairs(C, F)
+    C, F = line1[0], line1[1]
+    paths = make_pairs(C, F)
     line2 = ip2(C, F)
-    print(line2)
+    process_paths(paths, line2)
+    
     
 def ip1():
     string = input("Enter C and F: ")
     split = string.split(' ')
     try:
         if len(split) == 2 and isinstance(int(split[0]), int) and isinstance(int(split[1]), int):
-            return split
+            return int(split[0]), int(split[1])
     except:
         sys.exit("ERROR")
         
@@ -61,7 +62,7 @@ def ip2(C, F):
         print(split)
         try:
             if len(split) == 3 and isinstance(int(split[0]), int) and isinstance(int(split[1]), int) and isinstance(int(split[2]), int):
-                res[[split[0], split[1]]]= split[2]
+                res[str((int(split[0]), int(split[1])))]= int(split[2])
         except:
             sys.exit("ERROR")
     return res
@@ -72,7 +73,18 @@ def make_pairs(C,F):
         for j in range(1,C+1):
             if i != j:
                 psbl.append((i,j))
-    sys.exit(1)
-    
+    return psbl
+
+def process_paths(pathslist, pathdict):
+    #print(pathslist, pathdict)
+    cost_per_path = {}
+    lst = list(pathdict.keys())
+    for path in pathslist:
+        if str(path) in lst:
+            cost_per_path[str(path)] = pathdict[str(path)]
+        else:
+            print(1)
+    print(cost_per_path)
+        
 if __name__ == "__main__":
     take_input()
