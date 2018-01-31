@@ -93,16 +93,74 @@ def process_paths(pathslist, pathdict):
     #print(lst)
     for path in pathslist:
         if str(path) in lst and len(path) == 2 and isinstance(path[0], int):
-            cost_per_path[str(path)] = pathdict[str(path)]
+            cost_per_path[path] = {"path":path,"cost":pathdict[str(path)]}
         elif str(path[0]) in lst and str(path[1]) in lst and len(path) == 2:
-            cost_per_path[str((path[0][0], path[0][1], path[1][1]))] = int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])
+            cost_per_path[(path[0][0], path[0][1], path[1][1])] = {"path":path,"cost":int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])}
         elif str(path[0]) in lst and str(path[1]) in lst and str(path[2]) in lst  and len(path) == 3:
-            cost_per_path[str((path[0][0], path[0][1], path[2][0], path[2][1]))] = int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])+  int(pathdict[str(path[2])])
+            cost_per_path[(path[0][0], path[0][1], path[2][0], path[2][1])] = {"path":path,"cost":int(pathdict[str(path[0])]) +  int(pathdict[str(path[1])])+  int(pathdict[str(path[2])])}
 
     check_cost(cost_per_path)
     
 def check_cost(pathcost):
-    print(1) 
+    cummulation, finallst = {}, []
+    lstofpaths = list(pathcost.keys())
+    for path in lstofpaths:
+        revpath = list(path)
+        revpath.reverse()
+        if tuple(revpath) in lstofpaths:
+            lstofpaths.remove(tuple(revpath))
+        
+    for path in lstofpaths:
+        entry = []
+        pth  = pathcost[path]['path']
+        if isinstance(pth[0],int):
+            source = 'S'+str(pth[0])
+            dest = 'D'+str(pth[-1])
+        else:
+            source = 'S'+str(pth[0][0])
+            dest = 'D'+str(pth[-1][-1])            
+        entry.append(pathcost[path])
+        
+        if source+dest not in list(cummulation.keys()):
+            cummulation[source+dest] = [path, entry]
+        else:
+            data = cummulation[source+dest][1]
+            if data[0]['cost']<pathcost[path]['cost']:
+                data[0] = pathcost[path]
+            cummulation[source+dest] = [cummulation[source+dest][0], data]
+    for entry in list(cummulation.keys()):
+        data = cummulation[entry]
+        finallst.append(data)
+    #print(finallst)
+    check_max(finallst)
+
+def check_max(lst):
+    maxim, routes = 0 , []
+    for entr in lst:
+        entry = entr[1][0]
+        if entry['cost'] > maxim:
+            maxim = entry['cost']
+            route = entry
+            combo = entr[0]
+    #lst.remove(route)
+    for entr in lst:
+        entry = entr[1][0]
+        if entry != route and route['cost'] == entry['cost']:
+            routes.append([combo,route])
+            routes.append([entr[0],entry])
+    if len(routes) == 0:
+        routes.append([combo,route])
+    print_result(routes)
+    
+def print_result(paths):
+    print('Number of possible routes that Nikhil can take is',len(paths),'that costs',paths[0][1]['cost'],'dollars.')
+    
+    for pathog in paths:
+        path = pathog[1]
+        if len(path['path']) == 1:
+            print('From:',path['path'][0], '\nTo:',path['path'][-1],'\nRoute:',path )
+        else:
+            print('From:',path['path'][0][0], '\nTo:',path['path'][-1][-1],'\nRoute:',pathog[0] )
        
 if __name__ == "__main__":
     take_input()
